@@ -11,7 +11,10 @@ class MarkovChainProblemSolver:
         if len(transition_matrix) != len(transition_matrix[0]):
             raise ValueError("number of rows and columns should be the same")
         self.P = np.array(
-            [[Fraction(*i) if i else i for i in r] for r in transition_matrix]
+            [
+                [Fraction(*i) if isinstance(i, tuple) else i for i in r]
+                for r in transition_matrix
+            ]
         )
 
     def transition_power(self, n: int) -> np.ndarray:
@@ -106,21 +109,15 @@ class MarkovChainProblemSolver:
 
 if __name__ == "__main__":
     P = [
+        [(1, 8), (3, 8), (3, 8), (1, 8)],
+        [(1, 4), (1, 2), (1, 4), 0],
         [(1, 2), (1, 2), 0, 0],
-        [(1, 2), 0, (1, 2), 0],
-        [0, (1, 2), 0, (1, 2)],
-        [(1, 3), (1, 3), (1, 3), 0],
-    ]
-
-    P = [
-        [(1, 4), (1, 2), (1, 4)],
-        [(1, 3), (1, 3), (1, 3)],
-        [(1, 2), (1, 4), (1, 4)]
+        [1, 0, 0, 0],
     ]
 
     ps = MarkovChainProblemSolver(P)
-    print(ps.conditional_prob(0, [3, 2], [4, 1]))
+    # print(ps.conditional_prob(0, [3, 2], [4, 1]))
     # print(ps.transition_power(4))
     # print(ps.invariant_prob())
-    # print(ps.mean_return_time(3))
+    # print(ps.mean_return_time(0))
     # print(ps.mean_passage_time(1, 3))

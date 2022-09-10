@@ -6,6 +6,12 @@ import sympy
 
 class MarkovChainProblemSolver:
     def __init__(self, transition_matrix: list[list[tuple, int]]) -> None:
+        """Initiate a markov chain solver
+
+        Args:
+            transition_matrix (list[list[tuple, int]]): transition matrix, use tuple
+                (a, b) to denote a/b
+        """
         if not isinstance(transition_matrix[0], list):
             raise TypeError("dimension of the transition matrix must be 2")
         if len(transition_matrix) != len(transition_matrix[0]):
@@ -101,7 +107,7 @@ class MarkovChainProblemSolver:
         """
         if start_state == end_state:
             raise ValueError("start state cannot be the same as end state")
-        Q = np.delete(np.delete(self.P, start_state, 0), start_state, 1)
+        Q = np.delete(np.delete(self.P, end_state, 0), end_state, 1)
         M = np.array(sympy.Matrix(np.eye(len(Q), dtype=Fraction) - Q).inv())
         state = end_state if end_state < start_state else end_state - 1
         return Fraction(M[state, :].sum())
@@ -109,15 +115,22 @@ class MarkovChainProblemSolver:
 
 if __name__ == "__main__":
     P = [
-        [(1, 8), (3, 8), (3, 8), (1, 8)],
-        [(1, 4), (1, 2), (1, 4), 0],
-        [(1, 2), (1, 2), 0, 0],
-        [1, 0, 0, 0],
+        [(1, 3), (2, 3), 0, 0],
+        [(1, 2), 0, (1, 2), 0],
+        [0, (1, 2), 0, (1, 2)],
+        [0, 0, (3, 5), (2, 5)]
     ]
 
     ps = MarkovChainProblemSolver(P)
-    # print(ps.conditional_prob(0, [3, 2], [4, 1]))
-    # print(ps.transition_power(4))
-    # print(ps.invariant_prob())
-    # print(ps.mean_return_time(0))
-    # print(ps.mean_passage_time(1, 3))
+    tp4 = ps.transition_power(4)
+    tp1 = ps.transition_power(1)
+    print("(1)")
+    print(tp4[2, 3])
+    print("(2)")
+    print(tp4[2, 3] * tp1[3, 2] * tp1[2, 1] * tp1[1, 1])
+    print("(3)")
+    print(ps.invariant_prob())
+    print("(4)")
+    print(ps.mean_return_time(2))
+    print("(5)")
+    print(ps.mean_passage_time(2, 3))

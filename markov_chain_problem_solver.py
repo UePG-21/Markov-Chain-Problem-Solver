@@ -27,7 +27,7 @@ class MarkovChainProblemSolver:
         """Probabilities from each row state to each column state after `n` steps
 
         Args:
-            n (int): power of the transition matrix
+            n (int): exponent of the transition matrix
 
         Returns:
             np.ndarray: probability matrix, P^n
@@ -118,19 +118,30 @@ if __name__ == "__main__":
         [(1, 3), (2, 3), 0, 0],
         [(1, 2), 0, (1, 2), 0],
         [0, (1, 2), 0, (1, 2)],
-        [0, 0, (3, 5), (2, 5)]
+        [0, 0, (3, 5), (2, 5)],
     ]
 
-    ps = MarkovChainProblemSolver(P)
-    tp4 = ps.transition_power(4)
-    tp1 = ps.transition_power(1)
-    print("(1)")
-    print(tp4[2, 3])
-    print("(2)")
-    print(tp4[2, 3] * tp1[3, 2] * tp1[2, 1] * tp1[1, 1])
-    print("(3)")
+    A = [
+        [0, 1, 0, 0, 0],
+        [0, -3, 4, 0, 0],
+        [0, 0, -2, 1, 2],
+        [2, 0, 3, -5, 1],
+        [1, 1, 0, 0, -1],
+    ]
+
+    ps = MarkovChainProblemSolver(A)
     print(ps.invariant_prob())
-    print("(4)")
-    print(ps.mean_return_time(2))
-    print("(5)")
-    print(ps.mean_passage_time(2, 3))
+
+    # ps = MarkovChainProblemSolver(P)
+    # tp4 = ps.transition_power(4)
+    # tp1 = ps.transition_power(1)
+    # print("(1)")
+    # print(tp4[2, 3])
+    # print("(2)")
+    # print(tp4[2, 3] * tp1[3, 2] * tp1[2, 1] * tp1[1, 1])
+    # print("(3)")
+    # print(ps.invariant_prob())
+    # print("(4)")
+    # print(ps.mean_return_time(2))
+    # print("(5)")
+    # print(ps.mean_passage_time(2, 3))
